@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 
 def generate_image(prompt,width,height):
-    url = "http://192.168.0.206:7860"
+    url = "http://127.0.0.1:7860"
     payload = {
         "prompt": prompt,
         "negative_prompt": "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, disconnected limbs, mutation, mutated, ugly, disgusting, amputation",

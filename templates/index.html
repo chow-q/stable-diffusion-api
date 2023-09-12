@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Txt2Img Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+<h1>Txt2Img Generator</h1>
+<div id="app">
+  <form @submit.prevent="generateImage">
+    <label for="prompt">请输入prompt:</label>
+    <input type="text" id="prompt" v-model="prompt">
+    <label for="prompt">宽:</label>
+    <input type="text" id="width" v-model="width" :value="512">
+    <label for="height">高:</label>
+    <input type="text" id="height" v-model="height" :value="512">
+    <button type="submit">生成</button>
+  </form>
+  <div v-if="imageData">
+    <img :src="imageData" alt="Generated Image">
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      prompt: '',
+      width: '512',
+      height: '512',
+      imageData: null
+    },
+    methods: {
+      generateImage() {
+        fetch('/', {
+          method: 'POST',
+          body: JSON.stringify({ prompt: this.prompt, width: this.width, height: this.height }),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        })
+                .then(response => response.json())
+                .then(data => {
+                  this.imageData = 'data:image/png;base64,' + data.image})
+      }
+    }
+  });
+</script>
+</body>
+</html>

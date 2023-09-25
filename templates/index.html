@@ -3,21 +3,47 @@
 <head>
   <title>Txt2Img Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 </head>
 <body>
-<h1>Txt2Img Generator</h1>
 <div id="app">
-  <form @submit.prevent="generateImage">
-    <label for="prompt">请输入prompt:</label>
-    <input type="text" id="prompt" v-model="prompt">
-    <label for="prompt">宽:</label>
-    <input type="text" id="width" v-model="width" :value="512">
-    <label for="height">高:</label>
-    <input type="text" id="height" v-model="height" :value="512">
-    <button type="submit">生成</button>
-  </form>
-  <div v-if="imageData">
-    <img :src="imageData" alt="Generated Image">
+  <div style="display: flex; justify-content: center; align-items: center; height: 100vh; overflow: auto;">
+    <el-card style="width: 800px; text-align: center;">
+      <h1>Txt2Img Generator</h1>
+      <el-form @submit.native.prevent="generateImage">
+        <el-form-item>
+          <el-input v-model="prompt" placeholder="请输入prompt"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div style="display: flex; align-items: center;">
+            <span style="margin: 0 5px;">宽：</span>
+            <el-input v-model="width" size="small" placeholder="宽" style="width: 50%;"></el-input>
+            <span style="margin: 0 5px;">高：</span>
+            <el-input v-model="height" size="small" placeholder="高" style="width: 50%;"></el-input>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" native-type="submit">生成</el-button>
+        </el-form-item>
+      </el-form>
+      <div v-if="loading">
+        <el-card style="width: 800px;">
+          <div style="display: flex; justify-content: center; align-items: center; height: 500px;">
+            <el-loading text="加载中...">
+              <img alt="Loading" style="max-width: 100%; max-height: 100%;" />
+            </el-loading>
+          </div>
+        </el-card>
+      </div>
+      <div v-else-if="imageData">
+        <el-card style="width: 800px;">
+          <div style="display: flex; justify-content: center; align-items: center; height: 500px;">
+            <img :src="imageData" alt="Generated Image" style="max-width: 100%; max-height: 100%;" />
+          </div>
+        </el-card>
+      </div>
+    </el-card>
   </div>
 </div>
 
@@ -28,10 +54,12 @@
       prompt: '',
       width: '512',
       height: '512',
-      imageData: null
+      imageData: null,
+      loading: false
     },
     methods: {
       generateImage() {
+        this.loading = true;
         fetch('/', {
           method: 'POST',
           body: JSON.stringify({ prompt: this.prompt, width: this.width, height: this.height }),
@@ -42,7 +70,9 @@
         })
                 .then(response => response.json())
                 .then(data => {
-                  this.imageData = 'data:image/png;base64,' + data.image})
+                  this.imageData = 'data:image/png;base64,' + data.image
+                  this.loading = false;
+                })
       }
     }
   });

@@ -3,6 +3,7 @@ txt-to-image
 
 demo：
 
+![123](https://github.com/chow-q/stable-diffusion-api/assets/73530205/980a9902-8644-42ec-9c64-1991ca1d38e8)
 
-![image](https://github.com/chow-q/stable-diffusion-api/assets/73530205/477080ce-3461-4cd8-a19c-75979759dfe0)
+
 
